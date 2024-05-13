@@ -153,8 +153,6 @@ bot.on('callback_query', async (callbackQuery) => {
 
 
                     myObj['token'] = replyHandler.text;
-                    buyToken()
-
 
 
                 })
