@@ -1,0 +1,33 @@
+{
+  "name": "anime_ai_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@jup-ag/api": "^6.0.20",
+    "@moralisweb3/evm-utils": "^2.23.1",
+    "@pancakeswap-libs/sdk": "^1.0.1",
+    "@solana/spl-token": "^0.4.6",
+    "@solana/web3.js": "^1.91.8",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ethers": "^5.4",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "mongoose": "^6.9.0",
+    "moralis": "^2.23.1",
+    "node-telegram-bot-api": "^0.61.0",
+    "nodemon": "^2.0.20",
+    "qrcode": "^1.5.3",
+    "web3": "^4.2.2"
+  }
+}
