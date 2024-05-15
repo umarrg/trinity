@@ -93,16 +93,76 @@ bot.on('callback_query', async (callbackQuery) => {
     const messageId = message.message_id;
     const data = callbackQuery.data;
 
+
+
+    if (callbackQuery.data === "copy_trade") {
+        let message = `<b>Copy Trade</b> \n \n Copy Trade allows you to copy the buys and sells of any target wallet. \n 🟢 Indicates a copy trade setup is active. \n 🟠 Indicates a copy trade setup is paused. \n \n You do not have any copy trades setup yet. Click on the New button to create one!`;
+        bot.sendMessage(chatId, message, {
+            parse_mode: 'HTML',
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: '➕ New', callback_data: 'new' },
+                    ],
+                    [
+                        { text: 'Pause All', callback_data: 'pause' }
+                    ],
+                    [
+                        { text: '⬅️ Back', callback_data: 'close_b' }
+                    ],
+
+                ]
+            }
+        });
+    }
     if (callbackQuery.data === "close_b") {
         bot.deleteMessage(chatId, messageId);
+
+    }
+    if (callbackQuery.data === "new") {
+
+        const message = `<b>To setup a new Copy Trade:</b> \n - Assign a unique name or “tag” to your target wallet, to make it easier to identify. \n - Enter the target wallet address to copy trade. \n - Enter the percentage of the target's buy amount to copy trade with, or enter a specific SOL amount to always use. \n - Toggle on Copy Sells to copy the sells of the target wallet. \n - Click “Add” to create and activate the Copy Trade. \n \n <b>To manage your Copy Trade:</b> \n - Click the “Active” button to “Pause” the Copy Trade. \n - Delete a Copy Trade by clicking the “Delete” button.`
+        bot.sendMessage(chatId, message, {
+            parse_mode: 'HTML',
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: 'Tag: ', callback_data: 'tag' },
+                    ],
+                    [
+                        { text: 'Target Wallet:  -', callback_data: 'pause' }
+                    ],
+                    [
+                        { text: 'Buy Percentage: 100%', callback_data: 'buy_percentege' },
+                        { text: 'Copy Sells: ✅ yes', callback_data: 'copy_sell' }
+                    ],
+                    [
+                        { text: 'Buy Gas: 0.0015 SOL', callback_data: 'buy_gas' },
+                        { text: 'Sell Gas: 0.0015 SOL', callback_data: 'sell_gas' }
+                    ],
+                    [
+                        { text: 'Slippage: 15%', callback_data: 'pause' }
+                    ],
+                    [
+                        { text: '➕ Add', callback_data: 'add' }
+                    ],
+                    [
+                        { text: '⬅️ Back', callback_data: 'back' }
+                    ],
+
+                ]
+            }
+        });
 
     }
     if (callbackQuery.data === 'generate_wallet') {
         const user = await getUserById(chatId);
         let wallet = await generateWallet();
         let res = await addNewWallet({ address: wallet?.publicKey, privateKey: wallet?.secretKey.toString(), user: user._id, name: "sol" });
-        let content = `✅ Generated new wallet: \n Chain: SOLANA \n Public Key: ${wallet?.publicKey} \n PK: ${wallet?.secretKey} \n⚠️ Make sure to save this private key using pen and paper only.Do NOT copy - paste it anywhere.You could also import it to your Metamask / Trust Wallet.After you finish saving / importing the wallet credentials, delete this message.The bot will not display this information again.`
-        bot.sendMessage(chatId, content);
+        let content = `✅ Generated new wallet: \n Chain: SOLANA \n Public Key: <code>${wallet?.publicKey}</code> (tap to copy)\n PK: ${wallet?.secretKey} \n⚠️ Make sure to save this private key using pen and paper only.Do NOT copy - paste it anywhere.You could also import it to your Metamask / Trust Wallet.After you finish saving / importing the wallet credentials, delete this message.The bot will not display this information again.`
+        bot.sendMessage(chatId, content, {
+            parse_mode: "HTML",
+        });
     }
 
     if (callbackQuery.data === 'connect_wallet') {
@@ -121,11 +181,12 @@ bot.on('callback_query', async (callbackQuery) => {
                 let res = await addNewWallet({ address: wallet?.publicKey, privateKey: wallet?.secretKey.toString(), user: user._id, name: "sol" });
                 const balance = await connection.getBalance(wallet.publicKey);
                 let content = `
-            Balance: ${balance} SOL \nPublic Key: ${wallet?.publicKey.toBase58()}
-            `
+            Balance: ${balance} SOL \nPublic Key:  <code>${wallet?.publicKey.toBase58()}</code> (tap to copy)\n`
                 await bot.sendMessage(replyHandler.chat.id, content, {
+                    "parse_mode": "HTML",
                     "reply_markup": {
                         "force_reply": false,
+
                     }
                 });
             } catch (error) {

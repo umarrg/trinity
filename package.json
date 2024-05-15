@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@jup-ag/api": "^6.0.20",
+    "@jup-ag/api": "^6.0.22",
     "@moralisweb3/evm-utils": "^2.23.1",
     "@pancakeswap-libs/sdk": "^1.0.1",
     "@solana/spl-token": "^0.4.6",
