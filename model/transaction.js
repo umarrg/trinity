@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Transactions = new Schema({
-    token: { type: String, },
-    name: { type: String, },
+    fromAsset: { type: String, },
+    toAsset: { type: String, },
+    from: { type: String, },
+    to: { type: String, },
+    type: { type: String, },
     status: { type: String, default: "pending" },
-    amount: { type: String, },
+    amount: { type: Number, },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

@@ -1,8 +1,8 @@
-const Model = require('../model/transaction');
+const Model = require('../model/trade');
 
 class controller {
     constructor() { }
-    addNewTransaction(obj) {
+    addNewTrade(obj) {
         return new Promise((resolve, reject) => {
             let newItem = new Model(obj);
             newItem.save((err, saved) => {
@@ -25,7 +25,18 @@ class controller {
         });
     }
 
-    getTransactionByUser(user) {
+    updateTradesForUser(userId) {
+        return new Promise((resolve, reject) => {
+            Model.updateMany({ user: userId }, { copy: false }, { new: true }, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+    getTradeByUser(user) {
         return new Promise((resolve, reject) => {
             Model.find({ user }, (err, single) => {
                 if (err) {
@@ -35,16 +46,7 @@ class controller {
             }).populate('user');
         });
     }
-    updateTransaction(id) {
-        return new Promise((resolve, reject) => {
-            Model.updateOne(id, { status: "Done" }, (err, single) => {
-                if (err) {
-                    reject(err)
-                }
-                resolve(single);
-            })
-        });
-    }
+
     deleteOne(id) {
         return new Promise((resolve, reject) => {
             Model.findByIdAndDelete(id, (err, result) => {
