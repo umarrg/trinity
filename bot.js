@@ -149,7 +149,7 @@ bot.on('callback_query', async (callbackQuery) => {
 
         const trades = await getTradeByUser(user._id);
         const tradeContent = trades.map(trade => {
-            return `${trade.copy ? '🟢' : '🟠'} ${trade.tag} <a href="https://solscan.io/account/${trade.wallet}">_${trade.wallet}</a>`;
+            return `${trade.copy ? '🟢' : '🟠'} ${trade.tag} <a href="https://solscan.io/account/${trade.wallet}">${trade.wallet}</a>`;
         }).join('\n');
 
         let message = `<b>Copy Trade</b> \n \n Copy Trade allows you to copy the buys and sells of any target wallet. \n 🟢 Indicates a copy trade setup is active. \n 🟠 Indicates a copy trade setup is paused.\n\n${tradeContent || 'You do not have any copy trades setup yet. Click on the New button to create one!'}`;
