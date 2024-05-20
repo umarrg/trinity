@@ -10,7 +10,7 @@ const { generateWallet, importWallet, getSolBalance, getSolPriceInUSD } = requir
 const { getUserById, addNewUser } = require('./dao/user');
 const { addNewWallet, getWalletbyUser, getAllUserWallet } = require('./dao/wallet');
 const { addNewTransaction, getTransactionByUser } = require('./dao/transaction');
-const { addNewTrade, getTradeByUser, updateTradesForUser } = require('./dao/trade');
+const { addNewTrade, getTradeByUser, updateTradesForUser, updateTradeForUser, deleteTradeForUser } = require('./dao/trade');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, }));
@@ -162,7 +162,11 @@ bot.on('callback_query', async (callbackQuery) => {
                         { text: '➕ New', callback_data: 'new' },
                     ],
                     [
+                        { text: 'Pause One', callback_data: 'pauseOne' },
                         { text: 'Pause All', callback_data: 'pauseTrade' }
+                    ],
+                    [
+                        { text: '🗑️ Delete One', callback_data: 'deleteOne' },
                     ],
                     [
                         { text: '⬅️ Back', callback_data: 'close_b' }
@@ -339,7 +343,37 @@ bot.on('callback_query', async (callbackQuery) => {
     else if (data === 'add') {
 
 
-    } else if (data === 'pauseTrade') {
+
+    } else if (data === 'pauseOne') {
+        let listenerReply;
+        let contentMessage = await bot.sendMessage(chatId, "Enter the wallet Address", {
+            "reply_markup": {
+                "force_reply": true
+            }
+        });
+        listenerReply = (async (replyHandler) => {
+            bot.removeReplyListener(listenerReply);
+
+            await updateTradeForUser(user._id, replyHandler.text)
+            await bot.sendMessage(chatId, "Trade Paused successfully")
+        });
+        bot.onReplyToMessage(contentMessage.chat.id, contentMessage.message_id, listenerReply);
+    } else if (data === 'deleteOne') {
+        let listenerReply;
+        let contentMessage = await bot.sendMessage(chatId, "Enter the wallet Address", {
+            "reply_markup": {
+                "force_reply": true
+            }
+        });
+        listenerReply = (async (replyHandler) => {
+            bot.removeReplyListener(listenerReply);
+            await deleteTradeForUser(user._id, replyHandler.text)
+            await bot.sendMessage(chatId, "Trade Dellete successfully")
+        });
+        bot.onReplyToMessage(contentMessage.chat.id, contentMessage.message_id, listenerReply);
+    }
+
+    else if (data === 'pauseTrade') {
         updateTradesForUser(user._id)
     }
     else if (data === 'sell') {

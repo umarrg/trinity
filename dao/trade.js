@@ -36,6 +36,17 @@ class controller {
             });
         });
     }
+    updateTradeForUser(userId, wallet) {
+        return new Promise((resolve, reject) => {
+            Model.findOneAndUpdate({ user: userId, wallet: wallet }, { copy: false }, { new: true }, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
     getTradeByUser(user) {
         return new Promise((resolve, reject) => {
             Model.find({ user }, (err, single) => {
@@ -46,7 +57,17 @@ class controller {
             }).populate('user');
         });
     }
-
+    deleteTradeForUser(userId, wallet) {
+        return new Promise((resolve, reject) => {
+            Model.findOneAndDelete({ user: userId, wallet: wallet }, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
     deleteOne(id) {
         return new Promise((resolve, reject) => {
             Model.findByIdAndDelete(id, (err, result) => {
