@@ -14,9 +14,9 @@ class controller {
         });
     }
 
-    getAll() {
+    getActiveTrade() {
         return new Promise((resolve, reject) => {
-            Model.find((err, all) => {
+            Model.find({ copy: true }, (err, all) => {
                 if (err) {
                     reject(err)
                 }

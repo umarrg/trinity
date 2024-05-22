@@ -5,6 +5,7 @@ const { Connection, Keypair, VersionedTransaction, PublicKey } = require('@solan
 const fetch = require('cross-fetch');
 const cors = require("cors");
 const axios = require("axios");
+const { main } = require('./monitor');
 const web3 = require('@solana/web3.js');
 const { generateWallet, importWallet, getSolBalance, getSolPriceInUSD } = require('./config');
 const { getUserById, addNewUser } = require('./dao/user');
@@ -33,7 +34,9 @@ const commands = [
 ];
 
 bot.setMyCommands(commands);
-
+main().catch(err => {
+    console.error('Unexpected error:', err);
+})
 bot.onText(/\/start/, async (msg, match) => {
     let text = "Follow the White Rabbit"
     await bot.sendMessage(msg.chat.id, text, {

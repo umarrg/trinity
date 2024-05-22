@@ -35,7 +35,7 @@ class controller {
                     reject(err)
                 }
                 resolve(single);
-            }).populate('user');
+            })
         });
     }
     deleteOneWallet(address) {
