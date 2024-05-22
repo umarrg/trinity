@@ -47,6 +47,17 @@ class controller {
             });
         });
     }
+    activateTradeForUser(userId, wallet) {
+        return new Promise((resolve, reject) => {
+            Model.findOneAndUpdate({ user: userId, wallet: wallet }, { copy: true }, { new: true }, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
     getTradeByUser(user) {
         return new Promise((resolve, reject) => {
             Model.find({ user }, (err, single) => {
